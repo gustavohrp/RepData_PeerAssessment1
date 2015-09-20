@@ -1,23 +1,16 @@
 # Reproducible Research: Peer Assessment 1
 
-
 ## Loading and preprocessing the data
 
 Show any code that is needed to
 
-1. Load the data (i.e. read.csv())
+1. Load the data (i.e. `read.csv()`)
+2. Process/transform the data (if necessary) into a format suitable for your analysis
 
 
 ```r
 unzip("activity.zip")
 activity = read.csv("activity.csv")
-```
-
-2. Process/transform the data (if necessary) into a format suitable for your analysis
-
-
-```r
-steps.date <- aggregate(steps ~ date, data = activity, FUN = sum, na.rm = TRUE)
 ```
 
 ## What is mean total number of steps taken per day?
@@ -28,12 +21,13 @@ For this part of the assignment, you can ignore the missing values in the datase
 
 
 ```r
-hist(steps.date$steps)
+steps.date <- aggregate(steps ~ date, data = activity, FUN = sum, na.rm = TRUE)
+hist(steps.date$step) 
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-3-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-2-1.png) 
 
-2. Calculate and report the mean and median total number of steps taken per day
+2. Calculate and report the **mean** and **median** total number of steps taken per day
 
 
 ```r
@@ -57,7 +51,7 @@ The **median** total number of steps taken per day is 10765 steps.
   
 ## What is the average daily activity pattern?
 
-1. Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
+1. Make a time series plot (i.e. `type = "l"`) of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 
 
 ```r
@@ -65,7 +59,7 @@ steps.interval <- aggregate(steps ~ interval, data = activity, FUN = mean, na.rm
 plot(steps.interval, type = "l")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png) 
 
 2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
@@ -82,9 +76,9 @@ It is the **835** interval.
 
 ## Imputing missing values
 
-Note that there are a number of days/intervals where there are missing values (coded as NA). The presence of missing days may introduce bias into some calculations or summaries of the data.
+Note that there are a number of days/intervals where there are missing values (coded as `NA`). The presence of missing days may introduce bias into some calculations or summaries of the data.
 
-1. Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
+1. Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with `NA`s)
 
 
 ```r
@@ -111,7 +105,7 @@ activity1$steps[nas] <- activity1$steps.y[nas]
 activity1 <- activity1[,c(1:3)]
 ```
 
-4. Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
+4. Make a histogram of the total number of steps taken each day and Calculate and report the **mean** and **median** total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
 
 
 ```r
@@ -119,7 +113,13 @@ steps.date1 <- aggregate(steps ~ date, data=activity1, FUN=sum)
 barplot(steps.date1$steps, names.arg=steps.date1$date, xlab="date", ylab="steps")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-9-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-8-1.png) 
+
+```r
+hist(steps.date1$steps)
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-8-2.png) 
 
 ```r
 mean(steps.date1$steps)
@@ -154,7 +154,7 @@ activity1$day = ifelse(as.POSIXlt(as.Date(activity1$date))$wday%%6 ==
 activity1$day = factor(activity1$day, levels = c("weekday", "weekend"))
 ```
 
-2. Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). The plot should look something like the following, which was created using simulated data:
+1. Make a panel plot containing a time series plot (i.e. `type = "l"`) of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). The plot should look something like the following, which was created using **simulated data**:
 
 
 ```r
@@ -164,4 +164,4 @@ xyplot(steps ~ interval | factor(day), data = stepsInterval2, aspect = 1/2,
     type = "l")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-11-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-10-1.png) 
